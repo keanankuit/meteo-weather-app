@@ -1,5 +1,5 @@
-
 enum WeatherCode {
+  // Each enum value stores: API code, label for UI, and SVG asset path.
   clearSky(0, 'Clear sky', 'assets/icons/sunny.svg'),
   mainlyClear(1, 'Mainly clear', 'assets/icons/sunny.svg'),
   partlyCloudy(2, 'Partly cloudy', 'assets/icons/partly_cloudy.svg'),
@@ -14,7 +14,11 @@ enum WeatherCode {
   heavyRain(65, 'Heavy rain', 'assets/icons/rainy.svg'),
   slightRainShowers(80, 'Slight rain showers', 'assets/icons/rainy.svg'),
   moderateRainShowers(81, 'Moderate rain showers', 'assets/icons/rainy.svg'),
-  violentRainShowers(82, 'Violent rain showers', 'assets/icons/rain_thunder.svg'),
+  violentRainShowers(
+    82,
+    'Violent rain showers',
+    'assets/icons/rain_thunder.svg',
+  ),
   thunderstorm(95, 'Thunderstorm', 'assets/icons/rain_thunder.svg'),
   unknown(-1, 'Unknown weather', 'assets/icons/partly_cloudy.svg');
 
@@ -24,6 +28,7 @@ enum WeatherCode {
   final String label;
   final String iconAsset;
 
+  // Convert Open-Meteo's numeric weather_code into a WeatherCode enum.
   static WeatherCode fromJson(int code) {
     return WeatherCode.values.firstWhere(
       (weatherCode) => weatherCode.code == code,
@@ -31,6 +36,7 @@ enum WeatherCode {
     );
   }
 
+  // Convert the enum back to the API number if we ever serialize it.
   static int toJson(WeatherCode weatherCode) {
     return weatherCode.code;
   }

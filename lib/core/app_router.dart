@@ -10,20 +10,21 @@ enum AppRoutes {
   home('/'),
   search('/search');
 
-final String path;
+  const AppRoutes(this.path);
 
-const AppRoutes(this.path);
-
+  final String path;
 }
 
-
+// All app navigation lives here. This keeps WeatherApp focused on app setup.
 final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: AppRoutes.home.path,
       builder: (context, state) {
+        // The weather screen owns a WeatherCubit while this route is active.
         return BlocProvider(
-          create: (context) => sl<WeatherCubit>()..loadWeatherForCurrentLocation(),
+          create: (context) =>
+              sl<WeatherCubit>()..loadWeatherForCurrentLocation(),
           child: const WeatherScreen(),
         );
       },
@@ -31,6 +32,7 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.search.path,
       builder: (context, state) {
+        // Search gets its own Cubit so search state stays separate.
         return BlocProvider(
           create: (context) => sl<SearchCubit>(),
           child: const SearchScreen(),

@@ -13,29 +13,39 @@ class SearchScreen extends StatelessWidget {
       appBar: AppBar(
         title: SearchBar(
           hintText: 'Search for a city',
+          // Every typed change goes to the Cubit, which debounces the API call.
           onChanged: (value) =>
               context.read<SearchCubit>().searchDebounced(value),
         ),
       ),
       body: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
+          // Search is currently waiting for the geocoding API.
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
+
+          // Show API/parsing/network problems without crashing.
           if (state.errorMessage != null) {
             return Center(child: Text(state.errorMessage!));
           }
+
+          // Empty state before searching or when no locations are found.
           if (state.results.isEmpty) {
             return const Center(child: Text('No results'));
           }
+
+          // Show each geocoding result as a tappable location.
           return ListView.builder(
             itemCount: state.results.length,
             itemBuilder: (context, index) {
               final result = state.results[index];
+
               return ListTile(
                 title: Text(result.name),
                 subtitle: Text('${result.country}, ${result.admin1}'),
                 onTap: () {
+                  // Return the selected LocationResult to WeatherScreen.
                   context.pop(result);
                 },
               );

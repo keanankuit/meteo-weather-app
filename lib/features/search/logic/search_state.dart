@@ -7,7 +7,12 @@ class SearchState {
     this.errorMessage,
   });
 
+  // True while the geocoding API is being called.
   final bool isLoading;
+
+  // The list shown in SearchScreen.
   final List<LocationResult> results;
+
+  // Error text shown if search fails.
   final String? errorMessage;
 }

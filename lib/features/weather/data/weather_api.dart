@@ -6,6 +6,8 @@ class WeatherApi {
 
   WeatherApi(this.dio);
 
+  // Open-Meteo sometimes returns temporary server errors like 502.
+  // Retrying makes the app more forgiving without hiding real failures.
   Future<Response<dynamic>> _getWithRetry(
     String url, {
     required Map<String, dynamic> queryParameters,
@@ -17,6 +19,7 @@ class WeatherApi {
         return await dio.get(url, queryParameters: queryParameters);
       } on DioException catch (error) {
         final statusCode = error.response?.statusCode;
+        // Retry only temporary server/gateway problems.
         final shouldRetry =
             statusCode == 502 || statusCode == 503 || statusCode == 504;
 
@@ -35,6 +38,7 @@ class WeatherApi {
     required double longitude,
     required double latitude,
   }) async {
+    // The API endpoint stays the same; latitude and longitude decide the place.
     final response = await _getWithRetry(
       'https://api.open-meteo.com/v1/forecast',
       queryParameters: {
@@ -46,6 +50,7 @@ class WeatherApi {
       },
     );
 
+    // Open-Meteo wraps current weather under the "current" JSON key.
     return CurrentWeather.fromJson(response.data['current']);
   }
 }

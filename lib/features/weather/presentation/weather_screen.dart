@@ -19,16 +19,19 @@ class WeatherScreen extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           child: BlocBuilder<WeatherCubit, WeatherState>(
             builder: (context, state) {
+              // The Cubit is fetching either location or weather data.
               if (state.isLoading) {
                 return Center(child: const CircularProgressIndicator());
               }
 
+              // Keep errors visible while learning/debugging.
               if (state.errorMessage != null) {
                 return Text(state.errorMessage!);
               }
 
               final weather = state.weather;
 
+              // This is a fallback for the rare case where nothing loaded yet.
               if (weather == null) {
                 return const Text('No weather loaded yet');
               }
@@ -40,18 +43,22 @@ class WeatherScreen extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () async {
+                          // Open search and wait for it to pop back a result.
                           final result = await context.push<LocationResult>(
                             AppRoutes.search.path,
                           );
 
+                          // User pressed back without choosing a location.
                           if (result == null) {
                             return;
                           }
 
+                          // Async navigation can finish after the widget unmounts.
                           if (!context.mounted) {
                             return;
                           }
 
+                          // Use the selected location's coordinates to reload weather.
                           context.read<WeatherCubit>().loadWeather(
                             latitude: result.latitude,
                             longitude: result.longitude,
@@ -78,6 +85,7 @@ class WeatherScreen extends StatelessWidget {
                       const Spacer(),
                       IconButton(
                         onPressed: () {
+                          // Toggle light/dark mode through ThemeCubit.
                           context.read<ThemeCubit>().toggleTheme();
                         },
                         icon: BlocBuilder<ThemeCubit, bool>(
@@ -93,6 +101,7 @@ class WeatherScreen extends StatelessWidget {
                   const Spacer(),
                   Column(
                     children: [
+                      // WeatherCode decides which SVG asset represents the condition.
                       SvgPicture.asset(
                         weather.weatherCode.iconAsset,
                         width: 96,
@@ -115,6 +124,7 @@ class WeatherScreen extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
+                  // Bottom cards show the extra weather measurements.
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
@@ -159,6 +169,7 @@ class WeatherScreen extends StatelessWidget {
 }
 
 class _WeatherInfoCard extends StatelessWidget {
+  // Private helper widget for the repeated measurement cards.
   const _WeatherInfoCard({
     required this.icon,
     required this.label,
@@ -182,6 +193,7 @@ class _WeatherInfoCard extends StatelessWidget {
           children: [
             Icon(icon),
             const Spacer(),
+            // FittedBox keeps labels like "CLOUD COVER" on one line.
             FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,

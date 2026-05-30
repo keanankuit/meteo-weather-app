@@ -10,14 +10,17 @@ class WeatherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ThemeCubit lives above MaterialApp because MaterialApp needs its value.
     return BlocProvider(
       create: (context) => sl<ThemeCubit>(),
       child: BlocBuilder<ThemeCubit, bool>(
         builder: (context, isDarkMode) {
+          // MaterialApp.router lets go_router decide which screen is visible.
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             theme: AppThemes.light,
             darkTheme: AppThemes.dark,
+            // The bool from ThemeCubit controls the whole app theme.
             themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
             routerConfig: appRouter,
           );

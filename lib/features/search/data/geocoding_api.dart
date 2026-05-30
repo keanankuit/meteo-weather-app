@@ -6,6 +6,7 @@ class GeocodingApi {
 
   final Dio dio;
 
+  // Search Open-Meteo's geocoding API for places matching the typed name.
   Future<List<LocationResult>> searchLocations(String name) async {
     final response = await dio.get(
       'https://geocoding-api.open-meteo.com/v1/search',
@@ -17,10 +18,10 @@ class GeocodingApi {
       },
     );
 
+    // If the API returns no "results" key, treat it as an empty list.
     final results = response.data['results'] as List<dynamic>? ?? [];
 
-    return results
-        .map((json) => LocationResult.fromJson(json))
-        .toList();
+    // Convert every JSON object into a typed LocationResult model.
+    return results.map((json) => LocationResult.fromJson(json)).toList();
   }
 }
