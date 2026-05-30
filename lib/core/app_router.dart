@@ -23,7 +23,7 @@ final appRouter = GoRouter(
       path: AppRoutes.home.path,
       builder: (context, state) {
         return BlocProvider(
-          create: (context) => sl<WeatherCubit>()..loadWeather(),
+          create: (context) => sl<WeatherCubit>()..loadWeatherForCurrentLocation(),
           child: const WeatherScreen(),
         );
       },

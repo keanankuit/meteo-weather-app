@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_newest_app/features/search/logic/search_cubit.dart';
 import 'package:my_newest_app/features/search/logic/search_state.dart';
 
@@ -24,9 +25,24 @@ class SearchScreen extends StatelessWidget {
           if (state.errorMessage != null) {
             return Center(child: Text(state.errorMessage!));
           }
-          return Container();
+          if (state.results.isEmpty) {
+            return const Center(child: Text('No results'));
+          }
+          return ListView.builder(
+            itemCount: state.results.length,
+            itemBuilder: (context, index) {
+              final result = state.results[index];
+              return ListTile(
+                title: Text(result.name),
+                subtitle: Text('${result.country}, ${result.admin1}'),
+                onTap: () {
+                  context.pop(result);
+                },
+              );
+            },
+          );
         },
-      )
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_newest_app/core/app_router.dart';
 import 'package:my_newest_app/core/theme/theme_cubit.dart';
+import 'package:my_newest_app/features/search/data/location_result.dart';
 import 'package:my_newest_app/features/weather/logic/weather_cubit.dart';
 import 'package:my_newest_app/features/weather/logic/weather_state.dart';
 
@@ -19,7 +20,7 @@ class WeatherScreen extends StatelessWidget {
           child: BlocBuilder<WeatherCubit, WeatherState>(
             builder: (context, state) {
               if (state.isLoading) {
-                return const CircularProgressIndicator();
+                return Center(child: const CircularProgressIndicator());
               }
 
               if (state.errorMessage != null) {
@@ -38,7 +39,25 @@ class WeatherScreen extends StatelessWidget {
                   Row(
                     children: [
                       InkWell(
-                        onTap:() => context.push(AppRoutes.search.path),
+                        onTap: () async {
+                          final result = await context.push<LocationResult>(
+                            AppRoutes.search.path,
+                          );
+
+                          if (result == null) {
+                            return;
+                          }
+
+                          if (!context.mounted) {
+                            return;
+                          }
+
+                          context.read<WeatherCubit>().loadWeather(
+                            latitude: result.latitude,
+                            longitude: result.longitude,
+                            currentLocation: result.name,
+                          );
+                        },
                         child: Row(
                           children: [
                             const Icon(
@@ -46,8 +65,8 @@ class WeatherScreen extends StatelessWidget {
                               color: Colors.deepOrange,
                             ),
                             const SizedBox(width: 8),
-                            const Text(
-                              'Fisherhaven',
+                            Text(
+                              state.currentLocation ?? 'Current Location',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w600,
