@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_newest_app/features/weather/logic/weather_state.dart';
-import 'package:my_newest_app/weather_api.dart';
+import 'package:my_newest_app/features/weather/data/weather_api.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
   final WeatherApi weatherApi;
