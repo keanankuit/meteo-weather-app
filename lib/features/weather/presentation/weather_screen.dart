@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_newest_app/core/app_router.dart';
 import 'package:my_newest_app/core/theme/theme_cubit.dart';
 import 'package:my_newest_app/features/weather/logic/weather_cubit.dart';
 import 'package:my_newest_app/features/weather/logic/weather_state.dart';
@@ -35,13 +37,23 @@ class WeatherScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.location_on, color: Colors.deepOrange),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Fisherhaven',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
+                      InkWell(
+                        onTap:() => context.push(AppRoutes.search.path),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on,
+                              color: Colors.deepOrange,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Fisherhaven',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const Spacer(),
