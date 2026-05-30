@@ -1,0 +1,22 @@
+import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+import 'package:my_newest_app/core/theme/theme_cubit.dart';
+import 'package:my_newest_app/features/weather/logic/weather_cubit.dart';
+import 'package:my_newest_app/weather_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+final sl = GetIt.instance;
+
+void setupServiceLocator(SharedPreferences preferences) {
+  sl.registerLazySingleton<SharedPreferences>(() => preferences);
+
+  sl.registerLazySingleton<Dio>(() => Dio());
+
+  sl.registerLazySingleton<WeatherApi>(() => WeatherApi(sl<Dio>()));
+
+  sl.registerFactory<WeatherCubit>(() => WeatherCubit(sl<WeatherApi>()));
+  
+  sl.registerFactory<ThemeCubit>(
+  () => ThemeCubit(sl<SharedPreferences>()),
+);
+}
