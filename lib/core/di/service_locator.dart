@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_newest_app/core/location/location_service.dart';
-import 'package:my_newest_app/core/theme/theme_cubit.dart';
+import 'package:my_newest_app/shared/theme/theme_cubit.dart';
 import 'package:my_newest_app/features/search/data/geocoding_api.dart';
 import 'package:my_newest_app/features/search/logic/search_cubit.dart';
 import 'package:my_newest_app/features/weather/logic/weather_cubit.dart';

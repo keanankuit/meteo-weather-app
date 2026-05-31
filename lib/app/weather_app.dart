@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_newest_app/core/app_router.dart';
-import 'package:my_newest_app/core/service_locator.dart';
-import 'package:my_newest_app/core/theme/theme_cubit.dart';
-import 'package:my_newest_app/core/theme/themes.dart';
+import 'package:my_newest_app/core/di/service_locator.dart';
+import 'package:my_newest_app/app/router/app_router.dart';
+import 'package:my_newest_app/shared/theme/theme_cubit.dart';
+import 'package:my_newest_app/shared/theme/themes.dart';
 
 class WeatherApp extends StatelessWidget {
   const WeatherApp({super.key});
